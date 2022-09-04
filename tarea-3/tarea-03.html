@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Tarea 3: preprocesamiento</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="tarea-03_files/libs/clipboard/clipboard.min.js"></script>
+<script src="tarea-03_files/libs/quarto-html/quarto.js"></script>
+<script src="tarea-03_files/libs/quarto-html/popper.min.js"></script>
+<script src="tarea-03_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="tarea-03_files/libs/quarto-html/anchor.min.js"></script>
+<link href="tarea-03_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="tarea-03_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="tarea-03_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="tarea-03_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="tarea-03_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Tarea 3: preprocesamiento</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<p>Considera la siguiente cadena de preprocesamiento que vimos en clase:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidymodels)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(broom)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"./R/casas_traducir_geo.R"</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">83</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>casas_split <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(casas, <span class="at">prop =</span> <span class="fl">0.75</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>casas_entrena <span class="ot">&lt;-</span> <span class="fu">training</span>(casas_split)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>receta_casas <span class="ot">&lt;-</span> <span class="fu">recipe</span>(precio_miles <span class="sc">~</span> </span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>           nombre_zona <span class="sc">+</span> </span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>           area_hab_m2 <span class="sc">+</span> area_garage_m2 <span class="sc">+</span> area_sotano_m2 <span class="sc">+</span> </span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>           area_lote_m2 <span class="sc">+</span> </span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>           año_construccion <span class="sc">+</span> </span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>           calidad_gral <span class="sc">+</span> calidad_garage <span class="sc">+</span> calidad_sotano <span class="sc">+</span> </span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>           num_coches  <span class="sc">+</span> </span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>           aire_acondicionado <span class="sc">+</span> condicion_venta, </span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>           <span class="at">data =</span> casas_entrena) <span class="sc">|&gt;</span> </span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_filter</span>(condicion_venta <span class="sc">==</span> <span class="st">"Normal"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_select</span>(<span class="sc">-</span>condicion_venta, <span class="at">skip =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_cut</span>(calidad_gral, <span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">8</span>), </span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>           <span class="at">include_outside_range =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_novel</span>(nombre_zona, calidad_sotano, calidad_garage) <span class="sc">|&gt;</span> </span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_unknown</span>(calidad_sotano, calidad_garage) <span class="sc">|&gt;</span> </span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_other</span>(nombre_zona, <span class="at">threshold =</span> <span class="fl">0.02</span>, <span class="at">other =</span> <span class="st">"otras"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_mutate</span>(<span class="at">area_sotano_m2 =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(area_sotano_m2), <span class="dv">0</span>, area_sotano_m2)) <span class="sc">|&gt;</span> </span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_mutate</span>(<span class="at">area_garage_m2 =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(area_garage_m2), <span class="dv">0</span>, area_garage_m2)) <span class="sc">|&gt;</span> </span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_dummy</span>(nombre_zona, calidad_gral, calidad_garage, calidad_sotano, aire_acondicionado) <span class="sc">|&gt;</span> </span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_interact</span>(<span class="at">terms =</span> <span class="sc">~</span> area_hab_m2<span class="sc">:</span><span class="fu">starts_with</span>(<span class="st">"calidad_gral"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_interact</span>(<span class="at">terms =</span> <span class="sc">~</span> area_hab_m2<span class="sc">:</span><span class="fu">starts_with</span>(<span class="st">"nombre_zona"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_interact</span>(<span class="at">terms =</span> <span class="sc">~</span> area_garage_m2<span class="sc">:</span><span class="fu">starts_with</span>(<span class="st">"calidad_garage"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_interact</span>(<span class="at">terms =</span> <span class="sc">~</span> area_sotano_m2<span class="sc">:</span> <span class="fu">starts_with</span>(<span class="st">"calidad_sotano"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_nzv</span>(<span class="fu">all_predictors</span>(), <span class="at">freq_cut =</span> <span class="dv">900</span> <span class="sc">/</span> <span class="dv">1</span>, <span class="at">unique_cut =</span> <span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Entrenamos la receta y vemos cuántos casos y columnas tenemos:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>receta_casas_prep <span class="ot">&lt;-</span> <span class="fu">prep</span>(receta_casas, <span class="at">verbose =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>oper 1 step filter [training] 
+oper 2 step select [training] 
+oper 3 step cut [training] 
+oper 4 step novel [training] 
+oper 5 step unknown [training] 
+oper 6 step other [training] 
+oper 7 step mutate [training] 
+oper 8 step mutate [training] 
+oper 9 step dummy [training] 
+oper 10 step interact [training] 
+oper 11 step interact [training] 
+oper 12 step interact [training] 
+oper 13 step interact [training] 
+oper 14 step nzv [training] 
+The retained training set is ~ 0.46 Mb  in memory.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>datos_tbl <span class="ot">&lt;-</span> <span class="fu">juice</span>(receta_casas_prep)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(datos_tbl)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 907  62</code></pre>
+</div>
+</div>
+<p><em>Pregunta 1</em>: ¿Cuántas variables originales usamos para este modelo, comparado con el número de entradas derivadas?</p>
+<p>Usamos 6 variables independientes originales: <strong>area_hab_m2</strong>, <strong>area_garage_m2</strong>, <strong>area_sotano_m2</strong>, <strong>area_lote_m2</strong>, <strong>año_construccion</strong>, <strong>num_coches</strong> y 1 variable dependiente <strong>precio_miles</strong></p>
+<p><em>Pregunta 2</em>: ¿qué variables fueron procesadas para producir entradas con codificación dummy? Extrae de <em>datos_tbl</em> las columnas que corresponden a <em>calidad_gral</em>. ¿Cuántas columnas hay y por qué? Puedes ver los nombres de las columnas haciendo:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(datos_tbl)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "area_hab_m2"                         "area_garage_m2"                     
+ [3] "area_sotano_m2"                      "area_lote_m2"                       
+ [5] "año_construccion"                    "num_coches"                         
+ [7] "precio_miles"                        "nombre_zona_CollgCr"                
+ [9] "nombre_zona_Crawfor"                 "nombre_zona_Edwards"                
+[11] "nombre_zona_Gilbert"                 "nombre_zona_IDOTRR"                 
+[13] "nombre_zona_Mitchel"                 "nombre_zona_NAmes"                  
+[15] "nombre_zona_NoRidge"                 "nombre_zona_NridgHt"                
+[17] "nombre_zona_NWAmes"                  "nombre_zona_OldTown"                
+[19] "nombre_zona_Sawyer"                  "nombre_zona_SawyerW"                
+[21] "nombre_zona_Somerst"                 "nombre_zona_Timber"                 
+[23] "nombre_zona_otras"                   "calidad_gral_X.3.5."                
+[25] "calidad_gral_X.5.7."                 "calidad_gral_X.7.8."                
+[27] "calidad_gral_X.8.max."               "calidad_garage_Fa"                  
+[29] "calidad_garage_Gd"                   "calidad_garage_TA"                  
+[31] "calidad_garage_unknown"              "calidad_sotano_Fa"                  
+[33] "calidad_sotano_Gd"                   "calidad_sotano_TA"                  
+[35] "calidad_sotano_unknown"              "aire_acondicionado_Y"               
+[37] "area_hab_m2_x_calidad_gral_X.3.5."   "area_hab_m2_x_calidad_gral_X.5.7."  
+[39] "area_hab_m2_x_calidad_gral_X.7.8."   "area_hab_m2_x_calidad_gral_X.8.max."
+[41] "area_hab_m2_x_nombre_zona_CollgCr"   "area_hab_m2_x_nombre_zona_Crawfor"  
+[43] "area_hab_m2_x_nombre_zona_Edwards"   "area_hab_m2_x_nombre_zona_Gilbert"  
+[45] "area_hab_m2_x_nombre_zona_IDOTRR"    "area_hab_m2_x_nombre_zona_Mitchel"  
+[47] "area_hab_m2_x_nombre_zona_NAmes"     "area_hab_m2_x_nombre_zona_NoRidge"  
+[49] "area_hab_m2_x_nombre_zona_NridgHt"   "area_hab_m2_x_nombre_zona_NWAmes"   
+[51] "area_hab_m2_x_nombre_zona_OldTown"   "area_hab_m2_x_nombre_zona_Sawyer"   
+[53] "area_hab_m2_x_nombre_zona_SawyerW"   "area_hab_m2_x_nombre_zona_Somerst"  
+[55] "area_hab_m2_x_nombre_zona_Timber"    "area_hab_m2_x_nombre_zona_otras"    
+[57] "area_garage_m2_x_calidad_garage_Fa"  "area_garage_m2_x_calidad_garage_Gd" 
+[59] "area_garage_m2_x_calidad_garage_TA"  "area_sotano_m2_x_calidad_sotano_Fa" 
+[61] "area_sotano_m2_x_calidad_sotano_Gd"  "area_sotano_m2_x_calidad_sotano_TA" </code></pre>
+</div>
+</div>
+<p>Se usaron las variables nombre_zona, calidad_gral, calidad_garage, calidad_sotano y aire_acondicionado para producir codificación dummy.</p>
+<p>Hay 4 variables correspondientes a calidad general. El motivo es que cuando se hacen los cortes de calidad los rangos van de 0 a 3, de 3 a 5, de 5 a 7, de 7 a 8, y de 8 a 10, sin embargo el rango de 0 a 3 no es considerado ya que si la calidad general no entra dentro de los rangos previamente definidos, se puede inferir que corresponde al rango de calidad sin variable.</p>
+<p><em>Pregunta 3</em>: ¿qué entradas fueron creadas como interacciones de variables originales? Explica la razón de intentar utilizar estas interacciones. por ejemplo, area_hab y la zona.</p>
+<p>Se crearon las interacciones 1) <strong>area_hab_m2</strong> con <strong>calidad_gral</strong>, 2) <strong>area_hab_m2</strong> con <strong>nombre_zona</strong>, 3) <strong>area_garage_m2</strong> con <strong>calidad_garage</strong>, y 4) <strong>area_sotano_m2</strong> con <strong>calidad_sotano</strong>, lo que generó una serie de variables del tipo var1xvar2, según sean las variables usadas.</p>
+<p>Para el caso de <strong>area_hab_m2</strong> con <strong>calidad_gral</strong>, considero que fue creada porque generalmente la calidad de una casa está relacionada con el tamaño habitable, por lo que a mayor tamaño la calidad de la casa aumenta.</p>
+<p>Para el caso de <strong>area_hab_m2</strong> con <strong>nombre_zona</strong>, es altamente probable que dependiendo de la zona donde se encuentre la casa, la zona habitable se vea influenciada. Esto es, que hay zonas donde generalmente hay casas pequeñas y zonas donde hay generalmente casas grandes.</p>
+<p>Para el caso <strong>area_garage_m2</strong> con <strong>calidad_garage</strong>, es común que la calidad del garage de una casa esté relacionado con el área del mismo, por lo que mientras más grande sea el área de un garage es más probable que su calidad mejore.</p>
+<p>Para el caso <strong>area_sotano_m2</strong> con <strong>calidad_sotano</strong>, sucede lo mismo que con la primera y tercera interacción, a mayor área de sótano es propable que su calidad aumente.</p>
+<p><em>Pregunta 4</em> Explica cómo se construye la interacción de area_hab_m2 con nombre de zona. ¿Cómo se ven las columnas correspondientes a esta interacción? ¿Por qué estas columnas tienen muchos ceros?</p>
+<p>Dado que se crearon 16 variables dummy asociadas a los nombres de las zonas por ser una variable categórica, al establecer su interacción con <strong>area_hab_m2</strong> tenemos que crear una variable asociada a cada variable dummy, por lo que columnas dummy de <strong>nombre_zona</strong> donde hay 0’s deberían tener asociado un valor de 0 en su interacción con <strong>area_hab_m2</strong>, y aquellas donde tienen un valor de 1’s, el valor en su interacción debe ser del área habitable.</p>
+<p><em>Pregunta 5</em>: Ajusta un modelo y cuenta el número de coeficientes. La razón del preprocesamiento es mejorar el desempeño predictivo del modelo. ¿Por qué un modelo más complejo y con más coeficientes puede dar mejores resultados que uno más simple sin interacciones, por ejemplo? ¿Es por reducción de sesgo o de varianza?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>flujo_casas <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(receta_casas) <span class="sc">|&gt;</span> </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(<span class="fu">linear_reg</span>() <span class="sc">|&gt;</span> <span class="fu">set_engine</span>(<span class="st">"lm"</span>))</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>ajuste <span class="ot">&lt;-</span> <span class="fu">fit</span>(flujo_casas, casas_entrena)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>ajuste <span class="sc">|&gt;</span> <span class="fu">tidy</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), round, <span class="dv">2</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(term, estimate) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 62 × 2
+   term                estimate
+   &lt;chr&gt;                  &lt;dbl&gt;
+ 1 (Intercept)          -859.  
+ 2 area_hab_m2             0.8 
+ 3 area_garage_m2          1.02
+ 4 area_sotano_m2          0.88
+ 5 area_lote_m2            0.01
+ 6 año_construccion        0.39
+ 7 num_coches              2.11
+ 8 nombre_zona_CollgCr    16.7 
+ 9 nombre_zona_Crawfor    37.1 
+10 nombre_zona_Edwards    28.8 
+# … with 52 more rows
+# ℹ Use `print(n = ...)` to see more rows</code></pre>
+</div>
+</div>
+<p>Tenemos 62 coeficientes, 61 asociados a variables independientes y 1 asociado al intercepto. La razón por la que un modelo más complejo con más coeficientes puede dar un mejor resultado es que se consideran todos los datos y las relaciones que existen entre ellos, por lo que se puede explotar la distribución de los mismos para reducir tanto el sesgo como la varianza.</p>
+<p>Finalmente, puedes hacer predicciones con este modelo como sigue:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(ajuste, casas_entrena)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1,095 × 1
+   .pred
+   &lt;dbl&gt;
+ 1 138. 
+ 2 253. 
+ 3 104. 
+ 4 136. 
+ 5 108. 
+ 6 121. 
+ 7 115. 
+ 8 244. 
+ 9  16.1
+10 116. 
+# … with 1,085 more rows
+# ℹ Use `print(n = ...)` to see more rows</code></pre>
+</div>
+</div>
+<p><strong>Pregunta 7</strong> (opcional) Quita la última línea de preprocesamiento step_nvz (que quita variables con varianza cercana a cero). ¿Qué pasa cuando intentas hacer predicciones? En este ejemplo particular, ¿qué columnas elimina este paso? ¿El objetivo de este filtro es reducir varianza o sesgo?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>new_receta_casas <span class="ot">&lt;-</span> <span class="fu">recipe</span>(precio_miles <span class="sc">~</span> </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>           nombre_zona <span class="sc">+</span> </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>           area_hab_m2 <span class="sc">+</span> area_garage_m2 <span class="sc">+</span> area_sotano_m2 <span class="sc">+</span> </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>           area_lote_m2 <span class="sc">+</span> </span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>           año_construccion <span class="sc">+</span> </span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>           calidad_gral <span class="sc">+</span> calidad_garage <span class="sc">+</span> calidad_sotano <span class="sc">+</span> </span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>           num_coches  <span class="sc">+</span> </span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>           aire_acondicionado <span class="sc">+</span> condicion_venta, </span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>           <span class="at">data =</span> casas_entrena) <span class="sc">|&gt;</span> </span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_filter</span>(condicion_venta <span class="sc">==</span> <span class="st">"Normal"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_select</span>(<span class="sc">-</span>condicion_venta, <span class="at">skip =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_cut</span>(calidad_gral, <span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">8</span>), </span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>           <span class="at">include_outside_range =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_novel</span>(nombre_zona, calidad_sotano, calidad_garage) <span class="sc">|&gt;</span> </span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_unknown</span>(calidad_sotano, calidad_garage) <span class="sc">|&gt;</span> </span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_other</span>(nombre_zona, <span class="at">threshold =</span> <span class="fl">0.02</span>, <span class="at">other =</span> <span class="st">"otras"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_mutate</span>(<span class="at">area_sotano_m2 =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(area_sotano_m2), <span class="dv">0</span>, area_sotano_m2)) <span class="sc">|&gt;</span> </span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_mutate</span>(<span class="at">area_garage_m2 =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(area_garage_m2), <span class="dv">0</span>, area_garage_m2)) <span class="sc">|&gt;</span> </span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_dummy</span>(nombre_zona, calidad_gral, calidad_garage, calidad_sotano, aire_acondicionado) <span class="sc">|&gt;</span> </span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_interact</span>(<span class="at">terms =</span> <span class="sc">~</span> area_hab_m2<span class="sc">:</span><span class="fu">starts_with</span>(<span class="st">"calidad_gral"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_interact</span>(<span class="at">terms =</span> <span class="sc">~</span> area_hab_m2<span class="sc">:</span><span class="fu">starts_with</span>(<span class="st">"nombre_zona"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_interact</span>(<span class="at">terms =</span> <span class="sc">~</span> area_garage_m2<span class="sc">:</span><span class="fu">starts_with</span>(<span class="st">"calidad_garage"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_interact</span>(<span class="at">terms =</span> <span class="sc">~</span> area_sotano_m2<span class="sc">:</span> <span class="fu">starts_with</span>(<span class="st">"calidad_sotano"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>new_receta_casas_prep <span class="ot">&lt;-</span> <span class="fu">prep</span>(new_receta_casas, <span class="at">verbose =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>oper 1 step filter [training] 
+oper 2 step select [training] 
+oper 3 step cut [training] 
+oper 4 step novel [training] 
+oper 5 step unknown [training] 
+oper 6 step other [training] 
+oper 7 step mutate [training] 
+oper 8 step mutate [training] 
+oper 9 step dummy [training] 
+oper 10 step interact [training] 
+oper 11 step interact [training] 
+oper 12 step interact [training] 
+oper 13 step interact [training] 
+The retained training set is ~ 0.5 Mb  in memory.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>new_datos_tbl <span class="ot">&lt;-</span> <span class="fu">juice</span>(new_receta_casas_prep)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(new_datos_tbl)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 907  68</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(new_datos_tbl)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "area_hab_m2"                            
+ [2] "area_garage_m2"                         
+ [3] "area_sotano_m2"                         
+ [4] "area_lote_m2"                           
+ [5] "año_construccion"                       
+ [6] "num_coches"                             
+ [7] "precio_miles"                           
+ [8] "nombre_zona_CollgCr"                    
+ [9] "nombre_zona_Crawfor"                    
+[10] "nombre_zona_Edwards"                    
+[11] "nombre_zona_Gilbert"                    
+[12] "nombre_zona_IDOTRR"                     
+[13] "nombre_zona_Mitchel"                    
+[14] "nombre_zona_NAmes"                      
+[15] "nombre_zona_NoRidge"                    
+[16] "nombre_zona_NridgHt"                    
+[17] "nombre_zona_NWAmes"                     
+[18] "nombre_zona_OldTown"                    
+[19] "nombre_zona_Sawyer"                     
+[20] "nombre_zona_SawyerW"                    
+[21] "nombre_zona_Somerst"                    
+[22] "nombre_zona_Timber"                     
+[23] "nombre_zona_otras"                      
+[24] "calidad_gral_X.3.5."                    
+[25] "calidad_gral_X.5.7."                    
+[26] "calidad_gral_X.7.8."                    
+[27] "calidad_gral_X.8.max."                  
+[28] "calidad_garage_Fa"                      
+[29] "calidad_garage_Gd"                      
+[30] "calidad_garage_TA"                      
+[31] "calidad_garage_new"                     
+[32] "calidad_garage_unknown"                 
+[33] "calidad_sotano_Fa"                      
+[34] "calidad_sotano_Gd"                      
+[35] "calidad_sotano_TA"                      
+[36] "calidad_sotano_new"                     
+[37] "calidad_sotano_unknown"                 
+[38] "aire_acondicionado_Y"                   
+[39] "area_hab_m2_x_calidad_gral_X.3.5."      
+[40] "area_hab_m2_x_calidad_gral_X.5.7."      
+[41] "area_hab_m2_x_calidad_gral_X.7.8."      
+[42] "area_hab_m2_x_calidad_gral_X.8.max."    
+[43] "area_hab_m2_x_nombre_zona_CollgCr"      
+[44] "area_hab_m2_x_nombre_zona_Crawfor"      
+[45] "area_hab_m2_x_nombre_zona_Edwards"      
+[46] "area_hab_m2_x_nombre_zona_Gilbert"      
+[47] "area_hab_m2_x_nombre_zona_IDOTRR"       
+[48] "area_hab_m2_x_nombre_zona_Mitchel"      
+[49] "area_hab_m2_x_nombre_zona_NAmes"        
+[50] "area_hab_m2_x_nombre_zona_NoRidge"      
+[51] "area_hab_m2_x_nombre_zona_NridgHt"      
+[52] "area_hab_m2_x_nombre_zona_NWAmes"       
+[53] "area_hab_m2_x_nombre_zona_OldTown"      
+[54] "area_hab_m2_x_nombre_zona_Sawyer"       
+[55] "area_hab_m2_x_nombre_zona_SawyerW"      
+[56] "area_hab_m2_x_nombre_zona_Somerst"      
+[57] "area_hab_m2_x_nombre_zona_Timber"       
+[58] "area_hab_m2_x_nombre_zona_otras"        
+[59] "area_garage_m2_x_calidad_garage_Fa"     
+[60] "area_garage_m2_x_calidad_garage_Gd"     
+[61] "area_garage_m2_x_calidad_garage_TA"     
+[62] "area_garage_m2_x_calidad_garage_new"    
+[63] "area_garage_m2_x_calidad_garage_unknown"
+[64] "area_sotano_m2_x_calidad_sotano_Fa"     
+[65] "area_sotano_m2_x_calidad_sotano_Gd"     
+[66] "area_sotano_m2_x_calidad_sotano_TA"     
+[67] "area_sotano_m2_x_calidad_sotano_new"    
+[68] "area_sotano_m2_x_calidad_sotano_unknown"</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">setdiff</span>(<span class="fu">names</span>(new_datos_tbl), <span class="fu">names</span>(datos_tbl))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "calidad_garage_new"                     
+[2] "calidad_sotano_new"                     
+[3] "area_garage_m2_x_calidad_garage_new"    
+[4] "area_garage_m2_x_calidad_garage_unknown"
+[5] "area_sotano_m2_x_calidad_sotano_new"    
+[6] "area_sotano_m2_x_calidad_sotano_unknown"</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>new_flujo_casas <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(new_receta_casas) <span class="sc">|&gt;</span> </span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(<span class="fu">linear_reg</span>() <span class="sc">|&gt;</span> <span class="fu">set_engine</span>(<span class="st">"lm"</span>))</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>ajuste <span class="ot">&lt;-</span> <span class="fu">fit</span>(new_flujo_casas, casas_entrena)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(ajuste, casas_entrena)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in predict.lm(object = object$fit, newdata = new_data, type =
+"response"): prediction from a rank-deficient fit may be misleading</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1,095 × 1
+   .pred
+   &lt;dbl&gt;
+ 1 138. 
+ 2 253. 
+ 3 104. 
+ 4 136. 
+ 5 108. 
+ 6 121. 
+ 7 115. 
+ 8 244. 
+ 9  16.1
+10 116. 
+# … with 1,085 more rows
+# ℹ Use `print(n = ...)` to see more rows</code></pre>
+</div>
+</div>
+<p>El error puede ser porque todas las variables que se eliminan corresponden a las variables creadas de las categorías <em>new</em>, y el propósito de esta categoría es representar categorías de calidad nunca antes vistas, por lo que la data de entrenamiento no contiene datos con esta categoría en sus respectivas variables y no logra ajustar los coeficientes correspondientes.</p>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
